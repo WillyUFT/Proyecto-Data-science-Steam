@@ -1,2 +1,2 @@
-# Proyecto-data-science-Stem
+# Proyecto-data-science-Steam
 Proyecto data science
