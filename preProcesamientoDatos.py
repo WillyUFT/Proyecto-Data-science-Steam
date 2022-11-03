@@ -38,6 +38,8 @@ newReviews = newReviews.dropna()
 newReviews["release_year"] = numpy.nan
 newReviews["game_tags"] = numpy.nan
 
+# Vamos a pasar las reviews a minúsculas.
+newReviews = newReviews['review'].str.lower()
 
 # Ya que tenemos un montón de juegos con reseñas
 # vamos a buscar los tags y el año de lanzamiento en otro dataset
@@ -61,7 +63,6 @@ for a in range(len(newReviews)-1):
     
     # Tomamos el nombre del juego
     nombreJuegoReviews = newReviews.iloc[a]["name"]
-    
     # Si el juego, que tenemos en las reviews, no está en el
     # dataset que tiene los tags, entonces:
     if nombreJuegoReviews not in datosJuego["name"].values:
@@ -76,12 +77,13 @@ for a in range(len(newReviews)-1):
         anoLanzamiento = fechaLanzamiento[0:4] # Transformamos de fecha a años
         # Guardamos los tags
         tags = datosJuego[(datosJuego == nombreJuegoReviews).any(axis=1)]["steamspy_tags"].values[0]
-        
+        # Los preprocesamos al tiro
+        tags = tags.replace(";"," ") # Seramos los tags por espacios
+        tags = tags.lower() # Cambiamos a minúsculas
         # Guardamos las cosas dentro del dataset        
         newReviews.iloc[a, newReviews.columns.get_loc("release_year")] = anoLanzamiento
         newReviews.iloc[a, newReviews.columns.get_loc("game_tags")] = tags
-        
-
+         
 # Vamos a ver cuanto tiempo nos demoramos
 tiempoFinalDatosJuego = time.time() - inicioTiempoDatosJuego
 print('Para hacer la base más pequeña y limpiarla nos demoramos ' + str(datetime.timedelta(seconds=tiempoFinalDatosJuego)) + ' segundos')
