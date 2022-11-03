@@ -14,4 +14,7 @@ https://drive.google.com/file/d/1Ck31QWJ0ftY8YrcJa9EiwXG-x2wxfALH/view?usp=share
 
 4) Ejecutar preProcesamientoDatos.py, se demora más o menos 20 minutos en tener los datos completos.
 
-5) Hay que seguir haciendo cosas acá sjjssj
+5) Debería quedar un .csv más o menos así.
+https://drive.google.com/file/d/1IRz2Fc-7mQisWy0ybxBd07rizwMUZRDA/view?usp=share_link
+
+6) Hay que seguir haciendo cosas acá sjjssj
