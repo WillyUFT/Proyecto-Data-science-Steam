@@ -17,4 +17,4 @@ https://drive.google.com/file/d/1Ck31QWJ0ftY8YrcJa9EiwXG-x2wxfALH/view?usp=share
 5) Debería quedar un .csv más o menos así.
 https://drive.google.com/file/d/1IRz2Fc-7mQisWy0ybxBd07rizwMUZRDA/view?usp=share_link
 
-6) Hay que seguir haciendo cosas acá sjjssj
+6) Ejecutar el archivo analisis.py
