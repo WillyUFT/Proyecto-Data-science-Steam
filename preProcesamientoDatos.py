@@ -6,6 +6,9 @@ import numpy
 import time  # Para ver cuanto nos demoramos
 import datetime  # Para ver cuanto nos demoramos, pero lindo
 
+# Importamos las funciones extra
+import funcionesExtra as funEx
+
 # Importamos las librerías de las palabras malas
 import nltk
 from nltk.corpus import stopwords  # Este es para sacar las palabras no deseadas
@@ -40,45 +43,22 @@ newReviews = newReviews.set_axis(
 # Eliminamos los valores vacío
 newReviews = newReviews.dropna()
 
-# Vamos a pasar las reviews a minúsculas.
-newReviews["review"] = newReviews["review"].str.lower()
+# Vamos a mostrar un ejemplo de como se ve la tabla
+vallhalla = newReviews.loc[newReviews["name"] == "VA-11 Hall-A: Cyberpunk Bartender Action"]
 
-# Ahora vamos a sacar las palabras indeseadas
-# Descargamos las palabras que no nos sirven
-nltk.download("stopwords", quiet=True)
+# Vamos a mostrar 50 reviews de juegos distintos
+print("\n\n\nEJEMPLO DEL DATA FRAME\n\n\n")
+print(vallhalla.head(20))
 
-# Metemos las palabras malas en una variable
-stopwords = stopwords.words("english")
+# Vamos a limpiar las reviews
+newReviews["review"] = newReviews["review"].apply(lambda x: funEx.limpiar_texto(x))
 
-# También vamos a agregar unas palabras propias
-newStopWords = [
-    "really",
-    "game",
-    "one",
-    "much",
-    "amp",
-    "youtube",
-    "https",
-    "http",
-    "overall",
-    "watch",
-    "nbsp",
-    "play",
-    "i'm",
-]
+# Tenemos que volver a una estructura ordenada, pues con la tokenización se nos
+# desordena la tabla
+reviewsSeiso = newReviews.explode(column="review")
 
-# Añadimos las palabras propias
-stopwords.extend(newStopWords)
-
-# removing stopwords
-newReviews["review"] = newReviews["review"].apply(
-    lambda x: " ".join([word for word in x.split() if word not in (stopwords)])
-)
-
-# removing stopwords
-newReviews["review"] = newReviews["review"].apply(
-    lambda x: " ".join([word for word in x.split() if word not in (newStopWords)])
-)
+# Vamos a eliminar las stopwords
+reviewsSeiso = funEx.eliminar_stopwords(reviewsSeiso, "review")
 
 # Vamos a ver cuanto tiempo nos demoramos
 tiempoFinalReviews = time.time() - inicioTiempoReviews
@@ -90,7 +70,7 @@ print(
 
 # Vamos a mostrar 50 reviews de juegos distintos
 print("\n\n\nEJEMPLO DEL DATA FRAME\n\n\n")
-example = newReviews.groupby("name").sample(1, replace=True)
+example = reviewsSeiso.groupby("name").sample(4, replace=True)
 print(example.head(50))
 
 # Comenzamos a contar el tiempo, pero para el catálogo
@@ -171,11 +151,6 @@ for a in range(len(catalogoJuegos) - 1):
 # Eliminamos los valores vacío de nuevo, a veces surgen errores
 catalogoJuegos = catalogoJuegos.dropna()
 
-# Vamos a mostrar 50 reviews de juegos distintos
-print("\n\n\nEJEMPLO DEL DATA FRAME\n\n\n")
-example = catalogoJuegos.groupby("name").sample(1, replace=True)
-print(example.head(50))
-
 # Vamos a ver cuanto tiempo nos demoramos
 tiempoFinalCatalogo = time.time() - inicioTiempoCatalogo
 print(
@@ -184,6 +159,11 @@ print(
     + " segundos"
 )
 
+# Vamos a mostrar 50 reviews de juegos distintos
+print("\n\n\nEJEMPLO DEL DATA FRAME\n\n\n")
+example = catalogoJuegos.groupby("name").sample(1, replace=True)
+print(example.head(50))
+
 # Creamos los csv con los datos.
-newReviews.to_csv("basePreProcesada.csv", encoding="utf-8", index=False)
+reviewsSeiso.to_csv("baseProcesada.csv", encoding="utf-8", index=False)
 catalogoJuegos.to_csv("datosJuego.csv", encoding="utf-8", index=False)
